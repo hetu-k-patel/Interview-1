@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Food Odering App</title>
+      <link rel="stylesheet" href="./css/styles.css" />
+   </head>
+   <body>
+      <header>
+         <div class="search-bar">
+            <input type="text" id="search" placeholder="Search..." />
+         </div>
+         <div class="filter-sort">
+            <div class="filter">
+               <span>Sort </span>
+               <select id="sort">
+                  <option value="0">Name</option>
+                  <option value="1">Location</option>
+                  <option value="2">Reviews</option>
+               </select>
+            </div>
+            <div class="sort">
+               <span>Filter </span>
+               <select id="filter">
+                  <option value="0">Abraham Adesanya</option>
+                  <option value="1">Badore</option>
+                  <option value="2">Ajah</option>
+                  <option value="3">Lekki</option>
+               </select>
+            </div>
+         </div>
+      </header>
+      <div class="container">
+         <div class="card-wrapper">
+            <h1>No Data</h1>
+         </div>
+      </div>
+
+      <script src="./js/app.js"></script>
+   </body>
+</html>
