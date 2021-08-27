@@ -85,3 +85,17 @@ input:focus {
    margin-bottom: 5px;
    color: gray;
 }
+
+.pagination-btn {
+   margin: 40px 0 70px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.pagination-btn button {
+   width: 50px;
+   padding: 10px;
+   margin: 0 5px;
+   font-size: 15px;
+}

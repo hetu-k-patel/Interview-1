@@ -3,15 +3,19 @@ const sort = document.querySelector('#sort');
 const filter = document.querySelector('#filter');
 const search = document.querySelector('#search');
 const h1 = document.querySelector('h1');
+const paginationButtonsWrapper = document.querySelector('.pagination-btn');
 
 class App {
    #data;
+   #currentPage = 1;
+   #limit = 10;
 
    constructor() {
       this._getData();
       sort.addEventListener('change', this._sort.bind(this));
       filter.addEventListener('change', this._filter.bind(this));
       search.addEventListener('input', this._debounce.call(this, this._search, 200));
+      paginationButtonsWrapper.addEventListener('click', this._setPage.bind(this));
    }
 
    _getData() {
@@ -31,6 +35,28 @@ class App {
          });
    }
 
+   _setData(result) {
+      this.#data = result.Result;
+      this._paginationBtn.call(this, this.#data.length);
+      this._pagination(this.#data, this.#currentPage, this.#limit);
+   }
+
+   _setPage(e) {
+      if (e.target.dataset['page']) {
+         const page = e.target.dataset['page'];
+         this.#currentPage = page;
+         this._pagination(this.#data, this.#currentPage, this.#limit);
+      }
+   }
+
+   _pagination(data, currentPage, limit) {
+      const start = (currentPage - 1) * limit;
+      const end = start + limit;
+
+      const diplayedData = data.slice(start, end);
+      this._displayData(diplayedData);
+   }
+
    _debounce(fn, delay) {
       let timeoutId;
       const context = this;
@@ -44,12 +70,9 @@ class App {
    _search() {
       const value = search.value;
       const searchedData = this.#data.filter((d) => d.slug.includes(value));
-      this._displayData(searchedData);
-   }
 
-   _setData(result) {
-      this.#data = result.Result;
-      this._displayData(this.#data);
+      this._pagination(searchedData, this.#currentPage, this.#limit);
+      this._paginationBtn(searchedData.length);
    }
 
    _displayData(data) {
@@ -96,7 +119,8 @@ class App {
          default:
             alert('Wrong');
       }
-      this._displayData(sortedData);
+      this._pagination(sortedData, this.#currentPage, this.#limit);
+      this._paginationBtn(sortedData.length);
    }
 
    _filter(event) {
@@ -120,12 +144,20 @@ class App {
             break;
       }
 
-      this._displayData(filteredData);
+      this._pagination(sortedData, this.#currentPage, this.#limit);
+      this._paginationBtn(sortedData.length);
    }
 
    _reset() {
       const cards = document.querySelectorAll('.card');
       cards.forEach((card) => cardWrapper.removeChild(card));
+   }
+
+   _resetPaginationButtons() {
+      this.#currentPage = 1;
+      this.#limit = 10;
+      const buttons = document.querySelectorAll('.pagination-btn button');
+      buttons.forEach((button) => paginationButtonsWrapper.removeChild(button));
    }
 
    _compare(a, b, order) {
@@ -134,6 +166,20 @@ class App {
 
       if (order === 'A') return a.localeCompare(b);
       else return b.localeCompare(a);
+   }
+
+   _paginationBtn(totalRecords) {
+      this._resetPaginationButtons();
+
+      const totalPages = parseInt(totalRecords / this.#limit) + 1;
+
+      for (let i = 1; i <= totalPages; i++) {
+         const button = document.createElement('button');
+         button.textContent = i;
+         button.setAttribute('data-page', i);
+
+         paginationButtonsWrapper.appendChild(button);
+      }
    }
 }
 
